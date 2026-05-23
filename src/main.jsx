@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Analytics } from "@vercel/analytics/react";
 import {
   ArrowUpRight,
   Droplets,
@@ -62,15 +63,18 @@ const actions = [
 
 function App() {
   return (
-    <main className="min-h-screen bg-[#fbfaf6] text-lagoon-900">
-      <Header />
-      <Hero />
-      <Habitat />
-      <Neighbors />
-      <CareGuide />
-      <Join />
-      <Footer />
-    </main>
+    <>
+      <main className="min-h-screen bg-[#fbfaf6] text-lagoon-900">
+        <Header />
+        <Hero />
+        <Habitat />
+        <Neighbors />
+        <CareGuide />
+        <Join />
+        <Footer />
+      </main>
+      <Analytics />
+    </>
   );
 }
 
