@@ -1,154 +1,239 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { Analytics } from "@vercel/analytics/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  ArrowDown,
   ArrowUpRight,
+  Clock3,
   Droplets,
-  HeartHandshake,
-  Home,
-  Leaf,
-  Megaphone,
-  Sparkles
+  Feather,
+  Heart,
+  MapPin,
+  Shirt,
+  Sparkles,
+  UtensilsCrossed,
+  Waves
 } from "lucide-react";
 import "./styles.css";
 
-const brandName = "Patos a Salvo";
-const duckEmoji = "🦆";
+gsap.registerPlugin(ScrollTrigger);
 
-const habitatItems = [
+const communities = ["Chosica", "Chaclacayo", "Santa Clara", "Ate", "Lima"];
+
+const waterTips = [
   {
-    icon: Leaf,
-    title: "Totora y plantas nativas",
-    text: "Cuidamos la vegetación de humedales limeños para que los patos tengan sombra, alimento y refugio."
+    number: "01",
+    icon: Clock3,
+    title: "Ducha corta, pato feliz",
+    text: "Báñate rápido. La ducha no es un concierto de una hora: entra, enjabónate y sal.",
+    tag: "Menos tiempo"
   },
   {
+    number: "02",
+    icon: Shirt,
+    title: "Lava con carga completa",
+    text: "No malgastes agua lavando dos prendas. Junta la ropa y aprovecha cada ciclo.",
+    tag: "Más eficiencia"
+  },
+  {
+    number: "03",
+    icon: UtensilsCrossed,
+    title: "Cierra mientras enjabonas",
+    text: "Al lavar platos, cierra el caño mientras enjabonas y vuelve a abrirlo solo para enjuagar.",
+    tag: "Cero chorros libres"
+  },
+  {
+    number: "04",
     icon: Droplets,
-    title: "Agua sin basura",
-    text: "Un canal, una laguna o una acequia limpia pueden ser la diferencia para una familia de patitos."
-  },
-  {
-    icon: Home,
-    title: "Nidos sin sustos",
-    text: "Respetamos zonas de anidación y mantenemos distancia, sobre todo cuando hay crías cerca."
+    title: "Una fuga también cuenta",
+    text: "Un caño que gotea no es poca cosa. Repáralo y reutiliza agua siempre que sea posible.",
+    tag: "Cada gota suma"
   }
-];
-
-const neighbors = [
-  {
-    name: "El visitante de los Pantanos",
-    label: "Pantanos de Villa",
-    image: "/images/wood-duck.jpg",
-    text: "En Chorrillos, los humedales son descanso y hogar. Observar sin invadir también es una forma de cuidar."
-  },
-  {
-    name: "La familia del parque",
-    label: "Vecino urbano",
-    image: "/images/ducklings-grass.jpg",
-    text: "En parques y lagunas artificiales, lo mejor que podemos hacer es no darles pan y mantener limpia la orilla."
-  },
-  {
-    name: "El pato de paso",
-    label: "Ruta limeña",
-    image: "/images/wetland-ducks.jpg",
-    text: "Algunos se mueven entre cuerpos de agua buscando comida. Por eso Lima necesita corredores verdes cuidados."
-  }
-];
-
-const actions = [
-  "No les des pan, galletas ni comida salada.",
-  "Recoge plásticos, colillas y envolturas cerca del agua.",
-  "Mantén a perros con correa alrededor de lagunas y nidos.",
-  "Reporta redes, anzuelos o basura peligrosa a la municipalidad."
 ];
 
 function App() {
+  const page = useRef(null);
+
+  useLayoutEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return undefined;
+
+    const context = gsap.context(() => {
+      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      intro
+        .from(".brand", { y: -20, opacity: 0, duration: 0.55 })
+        .from(".hero-kicker", { y: 24, opacity: 0, duration: 0.5 }, "-=.25")
+        .from(".hero-word", { yPercent: 115, rotate: 2, duration: 0.9, stagger: 0.1 }, "-=.25")
+        .from(".hero-copy, .hero-actions", { y: 28, opacity: 0, duration: 0.65, stagger: 0.12 }, "-=.4")
+        .from(".hero-visual", { scale: 0.9, rotate: 3, opacity: 0, duration: 1 }, "-=.75")
+        .from(".hero-sticker", { scale: 0, rotate: -24, duration: 0.55, ease: "back.out(1.8)" }, "-=.35");
+
+      gsap.to(".hero-image", {
+        yPercent: 9,
+        ease: "none",
+        scrollTrigger: { trigger: ".hero-visual", start: "top 75%", end: "bottom top", scrub: true }
+      });
+
+      gsap.utils.toArray(".reveal").forEach((element) => {
+        gsap.from(element, {
+          y: 64,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: { trigger: element, start: "top 84%", once: true }
+        });
+      });
+
+      gsap.from(".tip-card", {
+        x: 80,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".tips-grid", start: "top 78%", once: true }
+      });
+
+      gsap.from(".fact-big span", {
+        yPercent: 110,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: "power4.out",
+        scrollTrigger: { trigger: ".fact-section", start: "top 65%", once: true }
+      });
+
+      gsap.to(".fact-image", {
+        rotate: 2,
+        y: -18,
+        ease: "none",
+        scrollTrigger: { trigger: ".fact-section", start: "top bottom", end: "bottom top", scrub: 1 }
+      });
+    }, page);
+
+    return () => context.revert();
+  }, []);
+
   return (
-    <>
-      <main className="min-h-screen bg-[#fbfaf6] text-lagoon-900">
-        <Header />
+    <div ref={page}>
+      <Header />
+      <main>
         <Hero />
-        <Habitat />
-        <Neighbors />
-        <CareGuide />
-        <Join />
-        <Footer />
+        <CommunityRibbon />
+        <Huachipa />
+        <WaterCare />
+        <BigFact />
+        <Manifesto />
       </main>
+      <Footer />
       <Analytics />
-    </>
+    </div>
   );
 }
 
-function DuckMark({ className = "" }) {
+function DuckBadge({ className = "" }) {
   return (
-    <span aria-hidden="true" className={`duck-mark ${className}`}>
-      {duckEmoji}
+    <span className={`duck-badge ${className}`} aria-hidden="true">
+      <span>NM</span>
+      <Feather size={18} strokeWidth={2.5} />
     </span>
   );
 }
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-lagoon-900/10 bg-[#fbfaf6]/95 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-        <a className="flex items-center gap-2 font-semibold text-lagoon-700" href="#inicio" aria-label={`${brandName}, inicio`}>
-          <DuckMark />
-          {brandName}
-        </a>
-        <div className="hidden items-center gap-7 text-sm text-lagoon-900/70 md:flex">
-          <a className="nav-link" href="#habitat">
-            Humedales
-          </a>
-          <a className="nav-link" href="#proteccion">
-            Cómo ayudar
-          </a>
-          <a className="nav-link" href="#vecinos">
-            Patos limeños
-          </a>
-          <a className="nav-link" href="#sumate">
-            Súmate
-          </a>
-        </div>
-        <a className="button-primary hidden md:inline-flex" href="#sumate">
-          Protege un pato
-        </a>
+    <header className="site-header">
+      <a className="brand" href="#inicio" aria-label="Ni un pato menos, inicio">
+        <DuckBadge />
+        <span>Ni un pato menos</span>
+      </a>
+      <nav className="desktop-nav" aria-label="Navegación principal">
+        <a href="#huachipa">Huachipa</a>
+        <a href="#agua">Cuida el agua</a>
+        <a href="#dato">Dato curioso</a>
       </nav>
+      <a className="header-cta" href="#agua">
+        Haz tu parte <ArrowUpRight size={17} />
+      </a>
     </header>
   );
 }
 
 function Hero() {
   return (
-    <section id="inicio" className="relative isolate min-h-[calc(100svh-4rem)] overflow-hidden md:min-h-[680px]">
-      <img
-        className="absolute inset-0 h-full w-full object-cover"
-        src="/images/wetland-ducks.jpg"
-        alt="Patos nadando entre plantas de humedal"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#fbfaf6]/25 via-[#fbfaf6]/76 to-[#fbfaf6]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#fbfaf6]/94 via-[#fbfaf6]/62 to-transparent" />
-      <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl items-center px-5 pb-16 pt-12 md:min-h-[680px] md:px-8 md:pb-20 md:pt-16">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-lagoon-600/20 bg-lagoon-50/90 px-4 py-2 text-sm font-medium text-lagoon-700">
-            <Sparkles size={16} />
-            Lima también cuida a sus patos
-          </span>
-          <p className="mt-5 text-2xl font-extrabold tracking-[0.08em] text-[#082c6c] md:text-xl">
-            #NiUnPatoMenos
+    <section className="hero" id="inicio">
+      <div className="hero-copy-block">
+        <p className="hero-kicker">
+          <Sparkles size={17} /> Una causa con pico y barrio
+        </p>
+        <h1 className="hero-title" aria-label="Ni un pato menos">
+          <span className="hero-line"><span className="hero-word">Ni un</span></span>
+          <span className="hero-line accent"><span className="hero-word">pato</span></span>
+          <span className="hero-line"><span className="hero-word">menos.</span></span>
+        </h1>
+        <p className="hero-copy">
+          Cuidemos el agua que compartimos. Una iniciativa para todas las comunidades de Lima, con especial cariño por <strong>Chosica, Chaclacayo, Santa Clara y Ate.</strong>
+        </p>
+        <div className="hero-actions">
+          <a className="primary-button" href="#agua">
+            Empezar por una gota <Droplets size={18} />
+          </a>
+          <a className="text-link" href="#huachipa">
+            Conoce a nuestros vecinos <ArrowDown size={18} />
+          </a>
+        </div>
+      </div>
+      <div className="hero-visual">
+        <img
+          className="hero-image"
+          src="/images/patos-lima-hero.png"
+          alt="Tres patos nadan en un paisaje de agua limpia inspirado en Lima Este"
+        />
+        <div className="hero-sticker" aria-hidden="true">
+          <span>Lima Este</span>
+          <strong>nada unida</strong>
+        </div>
+        <span className="visual-caption">Ilustración original · 2026</span>
+      </div>
+    </section>
+  );
+}
+
+function CommunityRibbon() {
+  const repeated = [...communities, ...communities];
+  return (
+    <div className="community-ribbon" aria-label="Comunidades de Lima">
+      <div className="ribbon-track">
+        {repeated.map((place, index) => (
+          <React.Fragment key={`${place}-${index}`}>
+            <span>{place}</span>
+            <i aria-hidden="true">●</i>
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Huachipa() {
+  return (
+    <section className="huachipa section-shell" id="huachipa">
+      <div className="section-index reveal">01 / NUESTROS VECINOS</div>
+      <div className="huachipa-grid">
+        <div className="reveal">
+          <p className="eyebrow"><MapPin size={16} /> Huachipa, Lima Este</p>
+          <h2>Hay una bandada que también llama <em>Lima</em> su hogar.</h2>
+        </div>
+        <div className="huachipa-copy reveal">
+          <p>
+            En el <strong>Parque de las Leyendas de Huachipa</strong> viven patos que dependen de espacios limpios, agua cuidada y visitantes respetuosos.
           </p>
-          <h1 className="mt-4 max-w-3xl font-display text-[3.15rem] font-semibold leading-[0.98] text-lagoon-900 md:text-7xl">
-            Que cada pato limeño nade tranquilo
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-lagoon-900/80">
-            Una guía ciudadana para proteger patos en los Pantanos de Villa, parques, canales y lagunas urbanas. Cuidarlos empieza con acciones simples y mucho respeto por su casa.
+          <p>
+            Mirarlos sin molestarlos, evitar lanzar comida inadecuada y no dejar residuos cerca del agua son gestos sencillos que protegen su día a día.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a className="button-primary" href="#proteccion">
-              Cómo ayudar hoy
-              <ArrowUpRight size={17} />
-            </a>
-            <a className="button-secondary" href="#habitat">
-              Ver sus refugios
-            </a>
+          <div className="local-note">
+            <Waves size={30} />
+            <span>Lo que hacemos río arriba también llega a su hogar.</span>
           </div>
         </div>
       </div>
@@ -156,38 +241,26 @@ function Hero() {
   );
 }
 
-function Habitat() {
+function WaterCare() {
   return (
-    <section id="habitat" className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-[1fr_0.92fr] md:items-center md:px-8 md:py-20">
-      <div className="relative">
-        <div className="blob-frame bg-lagoon-50">
-          <img
-            className="h-full w-full object-cover"
-            src="/images/ducklings-grass.jpg"
-            alt="Patito caminando sobre pasto"
-          />
+    <section className="water-section" id="agua">
+      <div className="section-shell">
+        <div className="section-index reveal">02 / MENOS DESPERDICIO</div>
+        <div className="water-heading reveal">
+          <p className="eyebrow light"><Droplets size={16} /> Consejos de barrio</p>
+          <h2>Ahorrar agua no tiene que ser un drama.</h2>
+          <p>Son pequeños cambios cotidianos. Juntos hacen una laguna de diferencia.</p>
         </div>
-        <div className="fact-badge">
-          <strong>Dato limeño</strong>
-          <span>Los Pantanos de Villa son un refugio clave para aves acuáticas dentro de la ciudad.</span>
-        </div>
-      </div>
-      <div>
-        <p className="eyebrow">Humedales y parques</p>
-        <h2 className="section-title">Dónde encuentran casa en Lima</h2>
-        <p className="mt-5 text-lg leading-8 text-lagoon-900/75">
-          Los patos no solo necesitan agua: necesitan orillas sanas, plantas, silencio y vecinos atentos. Cuando cuidamos un humedal o una laguna de barrio, también cuidamos la vida que mantiene fresca a la ciudad.
-        </p>
-        <div className="mt-8 space-y-4">
-          {habitatItems.map(({ icon: Icon, title, text }) => (
-            <article className="info-row" key={title}>
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-lagoon-100 text-lagoon-700">
-                <Icon size={22} />
-              </span>
-              <div>
-                <h3 className="font-semibold text-lagoon-900">{title}</h3>
-                <p className="mt-1 text-sm leading-6 text-lagoon-900/70">{text}</p>
+        <div className="tips-grid">
+          {waterTips.map(({ number, icon: Icon, title, text, tag }) => (
+            <article className="tip-card" key={number}>
+              <div className="tip-top">
+                <span>{number}</span>
+                <Icon size={28} />
               </div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <small>{tag}</small>
             </article>
           ))}
         </div>
@@ -196,109 +269,61 @@ function Habitat() {
   );
 }
 
-function Neighbors() {
+function BigFact() {
   return (
-    <section id="vecinos" className="mx-auto max-w-7xl px-5 py-12 md:px-8">
-      <div className="max-w-2xl">
-        <p className="eyebrow">Patos limeños</p>
-        <h2 className="section-title">Vecinos con plumas, pico y barrio</h2>
-        <p className="mt-4 text-lg leading-8 text-lagoon-900/70">
-          Lima tiene más vida silvestre de la que parece. Si aprendemos a mirar con calma, cada visita al agua puede volverse una oportunidad para proteger.
-        </p>
+    <section className="fact-section" id="dato">
+      <div className="fact-image-wrap reveal">
+        <img
+          className="fact-image"
+          src="/images/ganso-vs-pato.png"
+          alt="Comparación ilustrada de un ganso grande junto a un pato más pequeño"
+        />
+        <span className="fact-label">Ganso / Pato</span>
       </div>
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        {neighbors.map((duck) => (
-          <article className="duck-card" key={duck.name}>
-            <img src={duck.image} alt={`${duck.name} en su hábitat`} />
-            <div className="p-6">
-              <span>{duck.label}</span>
-              <h3>{duck.name}</h3>
-              <p>{duck.text}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CareGuide() {
-  return (
-    <section id="proteccion" className="bg-lagoon-900 py-16 text-white md:py-20">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-8">
-        <div>
-          <p className="text-sm font-bold uppercase tracking-[0.22em] text-skysoft">Cómo ayudar</p>
-          <h2 className="mt-3 font-display text-4xl font-semibold md:text-5xl">
-            Lima puede ser una ciudad más amable para sus patos
-          </h2>
-          <p className="mt-5 text-lg leading-8 text-white/75">
-            No hace falta una gran campaña para empezar. En una salida al parque, una visita a Chorrillos o una caminata cerca del agua, ya puedes hacer algo útil.
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {actions.map((action, index) => (
-            <article className="action-card" key={action}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <p>{action}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Join() {
-  return (
-    <section id="sumate" className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:px-8 md:py-20">
-      <div className="rounded-[48%_52%_47%_53%/55%_45%_55%_45%] bg-skysoft px-7 py-14 text-center shadow-inner md:px-16">
-        <Megaphone className="mx-auto text-[#0b5fb6]" size={42} />
-        <p className="mt-6 text-sm font-bold uppercase tracking-[0.24em] text-[#0b5fb6]">¿Sabías esto?</p>
-        <h2 className="mx-auto mt-4 max-w-3xl font-display text-3xl font-semibold leading-tight text-[#082c6c] md:text-5xl">
-          "Los gansos son más grandes que los patos."
+      <div className="fact-copy">
+        <div className="section-index reveal">03 / DATO CURIOSO</div>
+        <p className="fact-intro reveal">Aunque los gansos y los patos se parecen mucho…</p>
+        <h2 className="fact-big" aria-label="Los gansos son mucho más grandes">
+          <span>Los gansos</span>
+          <span>son <em>mucho</em></span>
+          <span>más grandes.</span>
         </h2>
-        <div className="mt-8 flex justify-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[#0b5fb6]/30" />
-          <span className="h-2 w-8 rounded-full bg-[#0b5fb6]" />
-          <span className="h-2 w-2 rounded-full bg-[#0b5fb6]/30" />
-        </div>
-      </div>
-      <aside className="bg-lagoon-600 p-8 text-white shadow-soft md:p-10">
-        <HeartHandshake size={42} />
-        <h2 className="mt-6 font-display text-4xl font-semibold">Súmate desde tu distrito</h2>
-        <p className="mt-5 leading-8 text-white/80">
-          Organiza una limpieza pequeña, avisa si encuentras basura peligrosa o comparte esta guía con tu colegio, familia o junta vecinal. La bandada también se cuida en comunidad.
+        <p className="fact-detail reveal">
+          Suelen tener el cuello más largo, patas más robustas y un cuerpo notablemente mayor. Parecidos, sí. Del mismo tamaño, para nada.
         </p>
-      </aside>
+      </div>
+    </section>
+  );
+}
+
+function Manifesto() {
+  return (
+    <section className="manifesto">
+      <div className="manifesto-duck" aria-hidden="true">🦆</div>
+      <p className="eyebrow reveal"><Heart size={16} /> Una ciudad, una bandada</p>
+      <h2 className="reveal">Cada gota que no desperdicias deja más agua para la vida.</h2>
+      <p className="reveal">
+        Desde Chosica hasta Ate, pasando por Chaclacayo y Santa Clara: hagamos de Lima una ciudad donde cuidar el agua sea parte de nuestra cultura.
+      </p>
+      <a className="primary-button dark reveal" href="#inicio">
+        Comparte la idea <ArrowUpRight size={18} />
+      </a>
     </section>
   );
 }
 
 function Footer() {
   return (
-    <footer className="border-t border-lagoon-900/10 bg-[#f4f0e7]">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-9 md:flex-row md:items-center md:justify-between md:px-8">
-        <div>
-          <a className="flex items-center gap-2 font-semibold text-lagoon-700" href="#inicio" aria-label={`${brandName}, inicio`}>
-            <DuckMark />
-            {brandName}
-          </a>
-          <p className="mt-2 text-sm italic text-lagoon-900/70">Cuidando patos limeños, un humedal a la vez.</p>
-        </div>
-        <div className="flex flex-wrap gap-5 text-sm text-lagoon-900/70">
-          <a href="#habitat">Humedales</a>
-          <a href="#proteccion">Acciones</a>
-          <a href="#sumate">Súmate</a>
-        </div>
-        <p className="text-sm text-lagoon-900/70 font-bold">
-          Hecho por Jordan, inspirado por María {duckEmoji}
-        </p>
+    <footer>
+      <div className="footer-brand">
+        <DuckBadge />
+        <strong>Ni un pato menos</strong>
       </div>
+      <p>Cuidamos patos. Cuidamos agua. Cuidamos Lima.</p>
+      <a href="#inicio">Volver arriba ↑</a>
     </footer>
   );
 }
-
-export default App;
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>

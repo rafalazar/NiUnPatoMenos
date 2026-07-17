@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && node scripts/prepare-sites.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
