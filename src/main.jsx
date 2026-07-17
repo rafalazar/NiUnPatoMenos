@@ -33,8 +33,8 @@ const waterTips = [
   {
     number: "02",
     icon: Shirt,
-    title: "Lava con carga completa",
-    text: "No malgastes agua lavando dos prendas. Junta la ropa y aprovecha cada ciclo.",
+    title: "Lava con el agua necesaria",
+    text: "No malgastes agua y reutilízala para regar o limpiar.",
     tag: "Más eficiencia"
   },
   {
@@ -42,7 +42,7 @@ const waterTips = [
     icon: UtensilsCrossed,
     title: "Cierra mientras enjabonas",
     text: "Al lavar platos, cierra el caño mientras enjabonas y vuelve a abrirlo solo para enjuagar.",
-    tag: "Cero chorros libres"
+    tag: "Cero desperdicio"
   },
   {
     number: "04",
@@ -164,7 +164,7 @@ function Hero() {
     <section className="hero" id="inicio">
       <div className="hero-copy-block">
         <p className="hero-kicker">
-          <Sparkles size={17} /> Una causa con pico y barrio
+          <Sparkles size={17} /> #SalvemosALosPatos
         </p>
         <h1 className="hero-title" aria-label="Ni un pato menos">
           <span className="hero-line"><span className="hero-word">Ni un</span></span>
@@ -176,10 +176,10 @@ function Hero() {
         </p>
         <div className="hero-actions">
           <a className="primary-button" href="#agua">
-            Empezar por una gota <Droplets size={18} />
+            Cada gota cuenta <Droplets size={18} />
           </a>
           <a className="text-link" href="#huachipa">
-            Conoce a nuestros vecinos <ArrowDown size={18} />
+            Conoce a nuestros amigos emplumados<ArrowDown size={18} />
           </a>
         </div>
       </div>
@@ -247,7 +247,7 @@ function WaterCare() {
       <div className="section-shell">
         <div className="section-index reveal">02 / MENOS DESPERDICIO</div>
         <div className="water-heading reveal">
-          <p className="eyebrow light"><Droplets size={16} /> Consejos de barrio</p>
+          <p className="eyebrow light"><Droplets size={16} /> Consejos útiles</p>
           <h2>Ahorrar agua no tiene que ser un drama.</h2>
           <p>Son pequeños cambios cotidianos. Juntos hacen una laguna de diferencia.</p>
         </div>
@@ -285,8 +285,8 @@ function BigFact() {
         <p className="fact-intro reveal">Aunque los gansos y los patos se parecen mucho…</p>
         <h2 className="fact-big" aria-label="Los gansos son mucho más grandes">
           <span>Los gansos</span>
-          <span>son <em>mucho</em></span>
-          <span>más grandes.</span>
+          <span>son <em>más grandes</em></span>
+          <span> que los patos.</span>
         </h2>
         <p className="fact-detail reveal">
           Suelen tener el cuello más largo, patas más robustas y un cuerpo notablemente mayor. Parecidos, sí. Del mismo tamaño, para nada.
@@ -300,7 +300,7 @@ function Manifesto() {
   return (
     <section className="manifesto">
       <div className="manifesto-duck" aria-hidden="true">🦆</div>
-      <p className="eyebrow reveal"><Heart size={16} /> Una ciudad, una bandada</p>
+      <p className="eyebrow reveal"><Heart size={16} /> Una ciudad, una comunidad</p>
       <h2 className="reveal">Cada gota que no desperdicias deja más agua para la vida.</h2>
       <p className="reveal">
         Desde Chosica hasta Ate, pasando por Chaclacayo y Santa Clara: hagamos de Lima una ciudad donde cuidar el agua sea parte de nuestra cultura.
@@ -319,7 +319,7 @@ function Footer() {
         <DuckBadge />
         <strong>Ni un pato menos</strong>
       </div>
-      <p>Cuidamos patos. Cuidamos agua. Cuidamos Lima.</p>
+      <p>Hecho por Jordan, inspirado por María 🦆❤️</p>
       <a href="#inicio">Volver arriba ↑</a>
     </footer>
   );
