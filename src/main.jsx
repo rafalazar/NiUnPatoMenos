@@ -319,7 +319,7 @@ function Footer() {
         <DuckBadge />
         <strong>Ni un pato menos</strong>
       </div>
-      <p>Hecho por Jordan, inspirado por María 🦆❤️</p>
+      <p>Hecho por Jordan, inspirado por María 🦆</p>
       <a href="#inicio">Volver arriba ↑</a>
     </footer>
   );
